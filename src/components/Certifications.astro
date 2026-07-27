@@ -1,0 +1,117 @@
+---
+import Icon from "./Icon.astro";
+import { CERTIFICATIONS } from "../data/certifications";
+---
+
+<section class="section" id="certifications">
+  <div class="container">
+    <h2 data-reveal>Certifications</h2>
+    <ul class="cert-list">
+      {
+        CERTIFICATIONS.map((cert) => {
+          const Tag = cert.url ? "a" : "div";
+          return (
+            <li class="cert-item" data-reveal>
+              <Tag
+                href={cert.url}
+                target={cert.url ? "_blank" : undefined}
+                rel={cert.url ? "noopener noreferrer" : undefined}
+                class="cert-link"
+              >
+                <span class="cert-icon">
+                  <Icon name="check" size={16} />
+                </span>
+                <span class="cert-text">
+                  <span class="cert-name">{cert.name}</span>
+                  <span class="text-muted cert-meta">
+                    {cert.issuer}
+                    {cert.year && ` · ${cert.year}`}
+                  </span>
+                </span>
+                {cert.url && (
+                  <Icon
+                    name="external-link"
+                    size={14}
+                    class="cert-external"
+                  />
+                )}
+              </Tag>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  h2 {
+    margin-bottom: var(--space-12);
+  }
+
+  .cert-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  @media (max-width: 640px) {
+    .cert-list {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .cert-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    min-height: 44px;
+    padding: var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    text-decoration: none;
+    color: var(--color-foreground);
+    transition: border-color 0.2s var(--ease);
+  }
+
+  .cert-link:hover {
+    border-color: var(--color-accent);
+  }
+
+  .cert-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--color-muted);
+    color: var(--color-accent);
+  }
+
+  .cert-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .cert-name {
+    font-weight: 600;
+    font-size: 0.9375rem;
+  }
+
+  .cert-meta {
+    font-size: 0.8125rem;
+  }
+
+  /* Icon is a child component with its own scope hash — needs :global(). */
+  :global(.cert-external) {
+    margin-left: auto;
+    color: var(--color-secondary);
+    flex-shrink: 0;
+  }
+</style>

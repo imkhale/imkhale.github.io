@@ -1,0 +1,102 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const dateFormat: Intl.DateTimeFormatOptions = {
+  year: "numeric",
+  month: "short",
+  day: "numeric",
+};
+---
+
+<BaseLayout
+  title="Blog"
+  description="Notes on analytics engineering, BI, and data modeling."
+>
+  <section class="section blog-section">
+    <div class="container-narrow">
+      <h1 data-reveal>Blog</h1>
+      <p class="text-muted blog-intro" data-reveal>
+        Notes on analytics engineering, BI, and data modeling.
+      </p>
+
+      {
+        posts.length === 0 ? (
+          <p class="text-muted">No posts yet — check back soon.</p>
+        ) : (
+          <ul class="post-list">
+            {posts.map((post) => (
+              <li class="post-list-item" data-reveal>
+                <a href={`/blog/${post.id}`}>
+                  <span class="post-list-date text-muted text-mono">
+                    {post.data.pubDate.toLocaleDateString(
+                      "en-US",
+                      dateFormat,
+                    )}
+                  </span>
+                  <span class="post-list-title">{post.data.title}</span>
+                  <span class="text-muted post-list-desc">
+                    {post.data.description}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .blog-section {
+    padding-block: var(--space-16) var(--space-24);
+  }
+
+  h1 {
+    margin-bottom: var(--space-3);
+  }
+
+  .blog-intro {
+    margin-bottom: var(--space-12);
+  }
+
+  .post-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .post-list-item a {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding-block: var(--space-6);
+    text-decoration: none;
+    color: var(--color-foreground);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .post-list-date {
+    font-size: 0.8125rem;
+  }
+
+  .post-list-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    transition: color 0.2s var(--ease);
+  }
+
+  .post-list-item a:hover .post-list-title {
+    color: var(--color-accent);
+  }
+
+  .post-list-desc {
+    font-size: 0.9375rem;
+  }
+</style>

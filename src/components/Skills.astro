@@ -1,0 +1,89 @@
+---
+import TechLogo from "./TechLogo.astro";
+import { SKILL_GROUPS } from "../data/skills";
+---
+
+<section class="section" id="skills">
+  <div class="container">
+    <h2 data-reveal>Skills</h2>
+    <div class="skills-grid">
+      {
+        SKILL_GROUPS.map((group) => (
+          <div class="skill-card" data-reveal>
+            <h3>{group.category}</h3>
+            <ul class="skill-tags">
+              {group.items.map((item) => (
+                <li>
+                  {item.logo && <TechLogo name={item.logo} size={14} class="skill-tag-logo" />}
+                  {item.name}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  h2 {
+    margin-bottom: var(--space-12);
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+  }
+
+  @media (max-width: 900px) {
+    .skills-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .skills-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .skill-card {
+    padding: var(--space-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+  }
+
+  .skill-card h3 {
+    margin-bottom: var(--space-4);
+    font-size: 1rem;
+  }
+
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .skill-tags li {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 0.8125rem;
+    color: var(--color-secondary);
+    background: var(--color-muted);
+    border-radius: 999px;
+    padding: var(--space-1) var(--space-3);
+  }
+
+  /* TechLogo renders as a child component with its own scope hash. Each logo
+     carries its own brand-color fill, so no color override needed here. */
+  :global(.skill-tag-logo) {
+    flex-shrink: 0;
+  }
+</style>

@@ -1,0 +1,63 @@
+---
+import Icon from "./Icon.astro";
+---
+
+<button
+  id="theme-toggle"
+  type="button"
+  aria-label="Toggle color theme"
+  class="theme-toggle"
+>
+  <Icon name="sun" class="icon-sun" />
+  <Icon name="moon" class="icon-moon" />
+</button>
+
+<style>
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    flex-shrink: 0;
+    border-radius: var(--radius);
+    border: 1px solid var(--color-border);
+    background: transparent;
+    color: var(--color-foreground);
+    cursor: pointer;
+    transition:
+      border-color 0.2s var(--ease),
+      background-color 0.2s var(--ease);
+  }
+
+  .theme-toggle:hover {
+    border-color: var(--color-accent);
+  }
+
+  /* Icon and Icon's svg are a child component, so its scope hash differs
+     from this file's — these rules must be fully :global() to match it. */
+  :global(.icon-moon) {
+    display: none;
+  }
+
+  :global([data-theme="dark"] .icon-sun) {
+    display: none;
+  }
+
+  :global([data-theme="dark"] .icon-moon) {
+    display: block;
+  }
+</style>
+
+<script>
+  const STORAGE_KEY = "theme";
+  const button = document.getElementById("theme-toggle");
+
+  button?.addEventListener("click", () => {
+    const root = document.documentElement;
+    const next =
+      root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    localStorage.setItem(STORAGE_KEY, next);
+  });
+</script>

@@ -1,0 +1,21 @@
+---
+import { TECH_LOGOS, type TechLogoName } from "../icons/tech-logos";
+
+interface Props {
+  name: TechLogoName;
+  size?: number;
+  class?: string;
+}
+
+const { name, size = 16, class: className } = Astro.props;
+const logo = TECH_LOGOS[name];
+---
+
+<svg
+  class={className}
+  width={size}
+  height={size}
+  viewBox={logo.viewBox}
+  aria-hidden="true"
+  set:html={logo.markup}
+/>

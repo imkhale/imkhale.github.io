@@ -1,0 +1,124 @@
+---
+import Icon from "./Icon.astro";
+import { PROJECTS } from "../data/projects";
+---
+
+<section class="section" id="projects">
+  <div class="container">
+    <h2 data-reveal>Projects</h2>
+    <div class="project-grid">
+      {
+        PROJECTS.map((project) => (
+          <article class="project-card" data-reveal>
+            <h3>{project.title}</h3>
+            <p class="text-muted project-description">
+              {project.description}
+            </p>
+            <ul class="project-stack">
+              {project.stack.map((tech) => (
+                <li>{tech}</li>
+              ))}
+            </ul>
+            <div class="project-links">
+              <a
+                href={project.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="project-link"
+              >
+                <Icon name="github" size={16} />
+                Source
+              </a>
+              {project.liveUrl && (
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="project-link"
+                >
+                  <Icon name="external-link" size={16} />
+                  Live
+                </a>
+              )}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  h2 {
+    margin-bottom: var(--space-12);
+  }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+    gap: var(--space-6);
+  }
+
+  .project-card {
+    padding: var(--space-8);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    transition: border-color 0.2s var(--ease);
+  }
+
+  .project-card:hover {
+    border-color: var(--color-accent);
+  }
+
+  .project-card h3 {
+    margin-bottom: var(--space-3);
+  }
+
+  .project-description {
+    margin-bottom: var(--space-4);
+  }
+
+  .project-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    list-style: none;
+    margin: 0 0 var(--space-6);
+    padding: 0;
+  }
+
+  .project-stack li {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .project-stack li:not(:last-child)::after {
+    content: "·";
+    margin-left: var(--space-2);
+    color: var(--color-border);
+  }
+
+  .project-links {
+    display: flex;
+    gap: var(--space-6);
+  }
+
+  .project-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 44px;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-foreground);
+  }
+
+  .project-link:hover {
+    color: var(--color-accent);
+  }
+</style>
