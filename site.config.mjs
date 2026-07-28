@@ -17,16 +17,17 @@ export const GITHUB_USERNAME = "imkhale";
 export const SITE_URL = `https://${GITHUB_USERNAME}.github.io`;
 export const BASE = "/";
 
-export const SITE_TITLE = "Kha Le — Analytics Engineer & BI Specialist";
+export const SITE_TITLE = "Kha Le — Senior Data Analyst | Analytics Engineering & BI";
 export const SITE_DESCRIPTION =
   "Portfolio of Kha Le: Data Analytics, Business Intelligence, and Analytics Engineering work across dbt, BigQuery, Power BI, and Python.";
 
 export const NAME = "Kha Le";
-export const ROLE_HEADLINE = "Analytics Engineer | BI & Data Specialist";
+export const ROLE_HEADLINE = "Senior Data Analyst | Analytics Engineering & BI";
 export const ROLE_TAGS = [
   "Data Analytics",
   "Business Intelligence",
   "Analytics Engineering",
+  "AI-Augmented Workflows",
 ];
 
 // Elevator pitch — shown in the hero, right under the tagline. Keep it to
