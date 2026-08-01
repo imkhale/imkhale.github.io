@@ -1,45 +1,41 @@
 ---
 import Icon from "./Icon.astro";
-import {
-  NAME,
-  ROLE_HEADLINE,
-  ROLE_TAGS,
-  SUMMARY,
-  IMPACT_STATS,
-} from "../../site.config.mjs";
+import HeroPortrait from "./HeroPortrait.astro";
+import { NAME, ROLE_HEADLINE, OPEN_TO, SUMMARY } from "../../site.config.mjs";
+
+// Whether a portrait asset exists decides the hero's column count. Kept in
+// sync with HeroPortrait's own glob so the grid doesn't reserve a column for
+// an image that isn't there.
+const hasPortrait =
+  Object.keys(
+    import.meta.glob("../assets/portrait.{jpg,jpeg,png,webp}"),
+  ).length > 0;
 ---
 
 <section class="hero">
   <div class="hero-glow" aria-hidden="true"></div>
-  <div class="container hero-inner">
-    <p class="hero-eyebrow" data-reveal>{NAME}</p>
-    <h1 data-reveal>{ROLE_HEADLINE}</h1>
-    <p class="hero-tags text-muted" data-reveal>{ROLE_TAGS.join(" · ")}</p>
-    <p class="hero-summary" data-reveal>{SUMMARY}</p>
+  <div class="container hero-inner" class:list={[{ "has-portrait": hasPortrait }]}>
+    <div class="hero-copy">
+      <p class="hero-eyebrow" data-reveal>{NAME}</p>
+      <h1 data-reveal>{ROLE_HEADLINE}</h1>
 
-    <div class="hero-stats" data-reveal>
-      {
-        IMPACT_STATS.map((stat) => (
-          <div class="stat-tile">
-            <svg class="stat-icon" viewBox="0 0 24 16" aria-hidden="true">
-              <rect class="stat-bar-1" x="0" y="9" width="5" height="7" rx="1.5" />
-              <rect class="stat-bar-2" x="9.5" y="5" width="5" height="11" rx="1.5" />
-              <rect class="stat-bar-3" x="19" y="0" width="5" height="16" rx="1.5" />
-            </svg>
-            <span class="stat-value text-mono">{stat.value}</span>
-            <span class="text-muted stat-label">{stat.label}</span>
-          </div>
-        ))
-      }
+      <p class="hero-open-to" data-reveal>
+        <span class="hero-open-dot" aria-hidden="true"></span>
+        {OPEN_TO}
+      </p>
+
+      <p class="hero-summary" data-reveal>{SUMMARY}</p>
+
+      <div class="hero-actions" data-reveal>
+        <a href="/cv" class="btn btn-primary">
+          View CV
+          <Icon name="download" size={16} />
+        </a>
+        <a href="#contact" class="btn btn-secondary"> Get in touch </a>
+      </div>
     </div>
 
-    <div class="hero-actions" data-reveal>
-      <a href="/cv" class="btn btn-primary">
-        View CV
-        <Icon name="download" size={16} />
-      </a>
-      <a href="#contact" class="btn btn-secondary"> Get in touch </a>
-    </div>
+    <HeroPortrait alt={`${NAME}, ${ROLE_HEADLINE}`} />
   </div>
 </section>
 
@@ -47,12 +43,12 @@ import {
   .hero {
     position: relative;
     overflow: hidden;
-    padding-block: var(--space-32) var(--space-24);
+    padding-block: var(--space-24) var(--space-20);
   }
 
   @media (max-width: 640px) {
     .hero {
-      padding-block: var(--space-16);
+      padding-block: var(--space-12) var(--space-16);
     }
   }
 
@@ -76,12 +72,25 @@ import {
   .hero-inner {
     position: relative;
     z-index: 1;
-    max-width: 52rem;
+  }
+
+  /* Two columns only when a real portrait exists — otherwise the copy keeps
+     a comfortable measure instead of stranding an empty right column. */
+  .hero-inner.has-portrait {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--space-16);
+  }
+
+  .hero-copy {
+    max-width: 44rem;
   }
 
   .hero-eyebrow {
-    font-size: 0.9375rem;
+    font-size: var(--text-base);
     font-weight: 600;
+    letter-spacing: 0.01em;
     color: var(--color-accent);
     margin-bottom: var(--space-4);
   }
@@ -89,87 +98,60 @@ import {
   .hero h1 {
     font-weight: 800;
     letter-spacing: -0.03em;
+    text-wrap: balance;
     margin-bottom: var(--space-6);
     transition-delay: 0.05s;
   }
 
-  .hero-tags {
-    font-size: 1.125rem;
+  .hero-open-to {
+    display: inline-flex;
+    /* Now that the full role list makes this wrap to 2-3 lines on narrow
+       viewports, centering the dot puts it beside a middle line instead of
+       the first — align it to the cap-height of that first line instead. */
+    align-items: flex-start;
+    gap: var(--space-2);
+    font-size: var(--text-md);
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--color-secondary);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: var(--space-3) var(--space-4);
     margin-bottom: var(--space-6);
     transition-delay: 0.1s;
   }
 
+  .hero-open-dot {
+    width: 7px;
+    height: 7px;
+    margin-top: 0.5em;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: #16a34a;
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.16);
+  }
+
   .hero-summary {
-    max-width: 42rem;
-    font-size: 1.0625rem;
-    line-height: 1.6;
+    max-width: 40rem;
+    font-size: var(--text-xl);
+    line-height: 1.65;
     color: var(--color-secondary);
     margin-bottom: var(--space-8);
     transition-delay: 0.15s;
-  }
-
-  .hero-stats {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-8);
-    max-width: 34rem;
-    padding-top: var(--space-6);
-    margin-bottom: var(--space-8);
-    border-top: 1px solid var(--color-border);
-    transition-delay: 0.2s;
-  }
-
-  .stat-tile {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-  }
-
-  .stat-icon {
-    width: 1.5rem;
-    height: 1rem;
-    display: block;
-  }
-
-  .stat-icon rect {
-    fill: var(--color-accent);
-  }
-
-  .stat-icon .stat-bar-1 {
-    opacity: 0.35;
-  }
-
-  .stat-icon .stat-bar-2 {
-    opacity: 0.65;
-  }
-
-  .stat-value {
-    font-size: 1.5rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-  }
-
-  .stat-label {
-    font-size: 0.75rem;
-    line-height: 1.3;
   }
 
   .hero-actions {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-4);
-    transition-delay: 0.25s;
+    transition-delay: 0.2s;
   }
 
-  @media (max-width: 480px) {
-    .hero-stats {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: var(--space-3);
-      max-width: none;
-    }
-
-    .stat-value {
-      font-size: 1.25rem;
+  @media (max-width: 1023px) {
+    .hero-inner.has-portrait {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-10);
     }
   }
 </style>

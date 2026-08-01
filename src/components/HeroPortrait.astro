@@ -1,0 +1,79 @@
+---
+// <Picture> rather than <Image> so the browser gets an avif/webp <source>
+// set with a jpeg fallback, instead of a single converted format.
+import { Picture } from "astro:assets";
+
+// The portrait is opt-in by file presence: drop src/assets/portrait.{jpg,…}
+// in and this renders; leave it out and the component renders nothing so the
+// hero falls back to a single-column layout. That's deliberate — an empty
+// photo frame on a live job-hunt site is worse than no photo at all.
+//
+// See src/assets/README.md for the crop/lighting spec.
+const matches = import.meta.glob<{ default: ImageMetadata }>(
+  "../assets/portrait.{jpg,jpeg,png,webp}",
+  { eager: true },
+);
+const portrait = Object.values(matches)[0]?.default;
+
+interface Props {
+  alt: string;
+}
+
+const { alt } = Astro.props;
+---
+
+{
+  portrait && (
+    <div class="portrait" data-reveal>
+      <Picture
+        src={portrait}
+        alt={alt}
+        widths={[400, 600, 800]}
+        sizes="(max-width: 1023px) 60vw, 22rem"
+        formats={["avif", "webp"]}
+        fallbackFormat="jpeg"
+        loading="eager"
+        class="portrait-img"
+      />
+    </div>
+  )
+}
+
+<style>
+  .portrait {
+    position: relative;
+    width: 100%;
+    max-width: 22rem;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--color-muted);
+    box-shadow: var(--shadow-md);
+    transition-delay: 0.3s;
+  }
+
+  /* A hairline inset rather than a hard border — keeps the photo feeling
+     like an object on the page without boxing it in. */
+  .portrait::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 1px rgba(15, 15, 20, 0.08);
+    pointer-events: none;
+  }
+
+  :global([data-theme="dark"]) .portrait::after {
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+
+  /* Image is a child component with its own scope hash — needs :global(). */
+  :global(.portrait-img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Pulled back just enough that the photo sits under the accent blue
+       instead of competing with it. */
+    filter: saturate(0.92) contrast(1.02);
+  }
+</style>

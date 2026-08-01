@@ -1,26 +1,41 @@
 ---
+import SectionHeading from "./SectionHeading.astro";
+
 // DRAFT copy — a coached first pass on Kha's career story. Keep editing
 // until every sentence sounds like something he'd actually say out loud.
+//
+// GO-LIVE GATE (as of 2026-08-01) — see the matching note on SUMMARY in
+// site.config.mjs. The closing paragraph below claims Kha is maintaining a
+// real dbt warehouse on BigQuery. As of this date that's not true yet — zero
+// hands-on dbt/BigQuery work has happened, only learning. This is
+// deliberate target-state copy: don't deploy (merge to `main`) until the
+// warehouse actually exists to match what's written here.
 const STORY = [
   "I graduated in Mechatronics Engineering from Ho Chi Minh City University of Technology, then joined Keppel Land Vietnam's Management Associate program — a rotation built for future business leaders, not for data people.",
-  "That's where the spark started, though I didn't notice it at the time. Coordinating an 816-unit handover, I built Excel trackers just to make sense of what was happening — which contractors were behind, which units still had defects, what the team needed to look at that week. I wasn't chasing data as a career. I just liked that a formula could tell me the truth faster than a meeting could.",
-  "That spark followed me to KONE and grew there — from reading a spreadsheet to building the dashboards an entire operations team relied on, then teaching myself SQL and Python simply because I wanted to understand more, before I even had a problem that needed them.",
-  "The same curiosity brought me to Prudential, where I now build the systems a life insurer's agency network trusts for real decisions — and it's what's pulling me toward the next layer, Analytics Engineering, the pipelines underneath the dashboards. I don't think it burns out. I think it's what keeps taking me further.",
+  "Coordinating a large residential handover, I built Excel trackers just to make sense of what was happening — which contractors were behind, what the team needed to look at that week. I wasn't chasing data as a career. I just liked that a formula could tell me the truth faster than a meeting could — the spark, though I didn't notice it at the time.",
+  "That spark followed me to KONE, where I went from reading a spreadsheet to building the dashboards an entire operations team relied on. Along the way I taught myself SQL and Python simply because I wanted to understand more — before I even had a problem that needed them.",
+  "The same curiosity brought me to Prudential, where I now build the systems a life insurer's agency network trusts for real decisions — and it's what pulled me toward the next layer down. Right now that's a dbt warehouse on BigQuery, modeling insurance policy and claims data with staging-to-mart layering, tests, and lineage I have to maintain myself.",
+  "Dashboards taught me what a business needs to see. Analytics engineering is how I make the layer underneath trustworthy enough to serve it. I don't think that curiosity burns out — I think it's what keeps taking me further.",
 ];
 ---
 
 <section class="section" id="about">
-  <div class="container-narrow">
-    <h2 data-reveal>About</h2>
-    <div class="about-story">
-      {STORY.map((paragraph) => <p data-reveal>{paragraph}</p>)}
+  <div class="container">
+    <div class="about-inner">
+      <SectionHeading eyebrow="Background" title="About" />
+      <div class="about-story">
+        {STORY.map((paragraph) => <p data-reveal>{paragraph}</p>)}
+      </div>
     </div>
   </div>
 </section>
 
 <style>
-  h2 {
-    margin-bottom: var(--space-8);
+  /* Constrained inside the standard container rather than swapping to
+     .container-narrow, so the section's left edge lines up with every other
+     section on the page instead of jumping inward. */
+  .about-inner {
+    max-width: 44rem;
   }
 
   .about-story {
@@ -30,8 +45,15 @@ const STORY = [
   }
 
   .about-story p {
-    font-size: 1.0625rem;
-    line-height: 1.7;
+    font-size: var(--text-xl);
+    line-height: 1.75;
     color: var(--color-secondary);
+  }
+
+  /* The closing pair is the positioning statement — lift it out of the
+     body-copy grey so it lands as a conclusion rather than trailing off. */
+  .about-story p:last-child {
+    color: var(--color-foreground);
+    font-weight: 500;
   }
 </style>

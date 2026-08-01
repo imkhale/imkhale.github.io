@@ -1,20 +1,44 @@
 ---
 import TechLogo from "./TechLogo.astro";
+import SectionHeading from "./SectionHeading.astro";
 import { SKILL_GROUPS } from "../data/skills";
 ---
 
 <section class="section section-alt" id="skills">
   <div class="container">
-    <h2 data-reveal>Skills</h2>
+    <SectionHeading
+      eyebrow="Toolkit"
+      title="Skills"
+      note="Split by how deep it actually goes: Core is job-proven over years, Actively building is real hands-on work still in progress."
+    />
+
     <div class="skills-grid">
       {
         SKILL_GROUPS.map((group) => (
-          <div class="skill-card" data-reveal>
-            <h3>{group.category}</h3>
+          <div class="skill-card surface surface-interactive" data-reveal>
+            {/* Level sits above the title as a mini-eyebrow rather than
+                inline beside it: "Actively building" is too wide to sit next
+                to a two-word category, and letting it wrap made the two rows
+                of cards align differently from each other. */}
+            <div class="skill-head">
+              {group.level && (
+                <span
+                  class:list={[
+                    "level",
+                    group.level === "Core" ? "level-core" : "level-building",
+                  ]}
+                >
+                  {group.level}
+                </span>
+              )}
+              <h3>{group.category}</h3>
+            </div>
             <ul class="skill-tags">
               {group.items.map((item) => (
                 <li>
-                  {item.logo && <TechLogo name={item.logo} size={14} class="skill-tag-logo" />}
+                  {item.logo && (
+                    <TechLogo name={item.logo} size={14} class="skill-tag-logo" />
+                  )}
                   {item.name}
                 </li>
               ))}
@@ -27,49 +51,67 @@ import { SKILL_GROUPS } from "../data/skills";
 </section>
 
 <style>
-  h2 {
-    margin-bottom: var(--space-12);
-  }
-
   .skills-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--space-6);
   }
 
   @media (max-width: 900px) {
     .skills-grid {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
   @media (max-width: 560px) {
     .skills-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 
   .skill-card {
     padding: var(--space-6);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    background: var(--color-surface);
-    box-shadow: var(--shadow-sm);
-    transition:
-      box-shadow 0.25s var(--ease),
-      transform 0.25s var(--ease),
-      border-color 0.25s var(--ease);
   }
 
-  .skill-card:hover {
-    border-color: var(--color-accent);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-3px);
+  .skill-head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+    /* Reserves the level row's height on the one card that has no level
+       (Domain Expertise), so all six card titles sit on the same baseline. */
+    min-height: 3.9rem;
+    margin-bottom: var(--space-5);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
   }
 
   .skill-card h3 {
-    margin-bottom: var(--space-4);
-    font-size: 1rem;
+    font-size: var(--text-lg);
+    margin-top: auto;
+  }
+
+  .level {
+    font-size: var(--text-2xs);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border-radius: 999px;
+    padding: var(--space-1) var(--space-3);
+  }
+
+  /* Deliberately close in weight: "actively building" is a statement of
+     direction, not a warning label, so it shouldn't read as a deficiency
+     next to Core. */
+  .level-core {
+    color: var(--color-accent-strong);
+    background: var(--color-accent-glow);
+  }
+
+  .level-building {
+    color: var(--color-secondary);
+    background: var(--color-muted);
   }
 
   .skill-tags {
@@ -85,7 +127,7 @@ import { SKILL_GROUPS } from "../data/skills";
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
-    font-size: 0.8125rem;
+    font-size: var(--text-sm);
     color: var(--color-secondary);
     background: var(--color-muted);
     border-radius: 999px;

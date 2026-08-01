@@ -1,0 +1,216 @@
+---
+// Layered dbt architecture, drawn as an inline SVG so it inherits the theme
+// tokens and costs zero requests / zero dependencies.
+//
+// Every label here renders something the project description already states
+// (staging-to-mart layering, automated data tests, documented
+// source-to-report lineage, dbt on BigQuery, policy + claims data). Nothing
+// is invented — if the project's real shape changes, change the copy in
+// src/data/projects.ts and this diagram together.
+
+interface Props {
+  title?: string;
+}
+
+const { title = "Warehouse architecture" } = Astro.props;
+
+// The viewBox is deliberately sized to roughly match the column it renders
+// in (~620px), so SVG font sizes land near their real pixel value. A wider
+// coordinate space scales the type down proportionally and the labels stop
+// being readable — that's the whole reason these numbers look arbitrary.
+const BOX_W = 105;
+const BOX_H = 80;
+const BOX_Y = 34;
+const GAP = 26;
+
+const STAGES = [
+  { label: "Sources", sub: "Policy · Claims" },
+  { label: "Staging", sub: "stg_" },
+  { label: "Intermediate", sub: "int_" },
+  { label: "Mart", sub: "dim_ · fct_" },
+  { label: "Reporting", sub: "Dashboards" },
+].map((stage, i) => ({ ...stage, x: i * (BOX_W + GAP) }));
+---
+
+<figure class="diagram">
+  <svg
+    viewBox="0 0 629 190"
+    role="img"
+    aria-labelledby="arch-title arch-desc"
+    class="diagram-svg"
+  >
+    <title id="arch-title">{title}</title>
+    <desc id="arch-desc">
+      Left-to-right data flow: policy and claims sources feed dbt staging
+      models, then intermediate models, then dimensional mart models, which
+      serve reporting dashboards. The staging, intermediate and mart layers
+      run as dbt models on BigQuery, with automated data tests and documented
+      source-to-report lineage.
+    </desc>
+
+    <defs>
+      <marker
+        id="arch-arrow"
+        viewBox="0 0 10 10"
+        refX="9"
+        refY="5"
+        markerWidth="6"
+        markerHeight="6"
+        orient="auto-start-reverse"
+      >
+        <path d="M0 0 L10 5 L0 10 z" class="d-arrowhead" />
+      </marker>
+    </defs>
+
+    {/* The dbt-managed span — everything between raw source and dashboard. */}
+    <rect x="121" y="22" width="387" height="104" rx="10" class="d-scope" />
+    <text x="131" y="14" class="d-scope-label">dbt on BigQuery</text>
+
+    {
+      STAGES.map((stage, i) => (
+        <>
+          <rect
+            x={stage.x}
+            y={BOX_Y}
+            width={BOX_W}
+            height={BOX_H}
+            rx="10"
+            class:list={[
+              "d-box",
+              i > 0 && i < STAGES.length - 1 ? "d-box-model" : "d-box-edge",
+            ]}
+          />
+          <text
+            x={stage.x + BOX_W / 2}
+            y={BOX_Y + 32}
+            class="d-label"
+            text-anchor="middle"
+          >
+            {stage.label}
+          </text>
+          <text
+            x={stage.x + BOX_W / 2}
+            y={BOX_Y + 54}
+            class="d-sub"
+            text-anchor="middle"
+          >
+            {stage.sub}
+          </text>
+
+          {i < STAGES.length - 1 && (
+            <line
+              x1={stage.x + BOX_W + 5}
+              y1={BOX_Y + BOX_H / 2}
+              x2={stage.x + BOX_W + GAP - 4}
+              y2={BOX_Y + BOX_H / 2}
+              class="d-arrow"
+              marker-end="url(#arch-arrow)"
+            />
+          )}
+        </>
+      ))
+    }
+
+    <line x1="0" y1="150" x2="629" y2="150" class="d-rule" />
+    <text x="0" y="174" class="d-note">
+      Automated data tests at every layer · Documented source-to-report lineage
+    </text>
+  </svg>
+</figure>
+
+<style>
+  .diagram {
+    margin: 0;
+    width: 100%;
+  }
+
+  .diagram-svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .d-scope {
+    fill: none;
+    stroke: var(--color-border);
+    stroke-width: 1;
+    stroke-dasharray: 4 4;
+  }
+
+  .d-scope-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    fill: var(--color-secondary);
+  }
+
+  .d-box {
+    stroke-width: 1;
+  }
+
+  /* Source and reporting are the world outside the project — drawn quieter
+     so the three dbt layers carry the emphasis. */
+  .d-box-edge {
+    fill: var(--color-muted);
+    stroke: var(--color-border);
+  }
+
+  .d-box-model {
+    fill: var(--color-accent-glow);
+    stroke: var(--color-accent);
+  }
+
+  .d-label {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    fill: var(--color-foreground);
+  }
+
+  .d-sub {
+    font-size: 11.5px;
+    font-weight: 500;
+    fill: var(--color-secondary);
+  }
+
+  .d-arrow {
+    stroke: var(--color-secondary);
+    stroke-width: 1.5;
+  }
+
+  .d-arrowhead {
+    fill: var(--color-secondary);
+  }
+
+  .d-rule {
+    stroke: var(--color-border);
+    stroke-width: 1;
+  }
+
+  .d-note {
+    font-size: 11.5px;
+    font-weight: 500;
+    fill: var(--color-secondary);
+  }
+
+  /* Below ~470px the five columns stop being legible at any font size the
+     SVG can produce, so scroll it horizontally at a readable minimum rather
+     than shrinking the type into illegibility. */
+  @media (max-width: 470px) {
+    .diagram {
+      overflow-x: auto;
+      /* Bleed to the card's padding edges (--space-8 at this breakpoint) so
+         the scroll region doesn't look like a clipped element. */
+      margin-inline: calc(var(--space-8) * -1);
+      padding-inline: var(--space-8);
+    }
+
+    .diagram-svg {
+      width: 440px;
+      /* Beats the `svg { max-width: 100% }` reset in global.css, which would
+         otherwise shrink this back to the container and defeat the scroll. */
+      max-width: none;
+    }
+  }
+</style>

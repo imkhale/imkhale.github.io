@@ -1,0 +1,48 @@
+---
+// One heading treatment for every section: a small accent eyebrow that says
+// what the section IS, the title, and an optional one-line framing note.
+// Sections previously each rolled their own <h2> + margin, which is why the
+// page read as eight interchangeable blocks — this gives them a shared rank.
+interface Props {
+  eyebrow: string;
+  title: string;
+  note?: string;
+  id?: string;
+}
+
+const { eyebrow, title, note, id } = Astro.props;
+---
+
+<header class="section-heading">
+  <p class="eyebrow" data-reveal>{eyebrow}</p>
+  <h2 id={id} data-reveal>{title}</h2>
+  {
+    note && (
+      <p class="text-muted section-note" data-reveal>
+        {note}
+      </p>
+    )
+  }
+</header>
+
+<style>
+  .section-heading {
+    margin-bottom: var(--section-heading-gap);
+  }
+
+  .eyebrow {
+    margin-bottom: var(--space-3);
+  }
+
+  h2 {
+    transition-delay: 0.05s;
+  }
+
+  .section-note {
+    max-width: 52ch;
+    margin-top: var(--space-4);
+    font-size: var(--text-xl);
+    line-height: 1.6;
+    transition-delay: 0.1s;
+  }
+</style>
