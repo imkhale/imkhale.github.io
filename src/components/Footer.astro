@@ -1,6 +1,6 @@
 ---
 import Icon from "./Icon.astro";
-import { NAME, SOCIALS } from "../../site.config.mjs";
+import { NAME, SOCIALS, OPEN_TO_ROLES } from "../../site.config.mjs";
 
 const year = new Date().getFullYear();
 ---
@@ -10,7 +10,7 @@ const year = new Date().getFullYear();
     <div class="footer-contact">
       <h2>Let's talk</h2>
       <p class="text-muted">
-        Open to Analytics Engineer, BI, and Data roles — reach out directly.
+        Open to {OPEN_TO_ROLES} roles — reach out directly.
       </p>
       <a href={`mailto:${SOCIALS.email}`} class="footer-email">
         {SOCIALS.email}
@@ -68,14 +68,17 @@ const year = new Date().getFullYear();
     margin-bottom: var(--space-3);
   }
 
+  /* Widened from 32ch: this line now carries the full list of target job
+     titles for recruiter/ATS keyword matching, and 32ch broke it into a
+     six-line column. */
   .footer-contact p {
-    max-width: 32ch;
+    max-width: 46ch;
     margin-bottom: var(--space-4);
   }
 
   .footer-email {
     display: inline-block;
-    font-size: 1.125rem;
+    font-size: var(--text-2xl);
     font-weight: 600;
     text-decoration: underline;
     text-decoration-color: var(--color-border);
@@ -114,6 +117,6 @@ const year = new Date().getFullYear();
     gap: var(--space-2);
     padding-top: var(--space-6);
     border-top: 1px solid var(--color-border);
-    font-size: 0.875rem;
+    font-size: var(--text-md);
   }
 </style>

@@ -10,12 +10,23 @@ import Certifications from "../components/Certifications.astro";
 import Education from "../components/Education.astro";
 ---
 
+{/*
+  Order is the argument the page makes: who I am (Hero, About) → what I can
+  do (Skills) → where I've done it (Experience) → the receipts (Impact) →
+  what I'm building now (Projects) → the paper trail (Certifications,
+  Education).
+
+  Featured impact deliberately sits AFTER Experience rather than before
+  About: those numbers are evidence, and evidence only lands once the reader
+  knows whose it is. Projects follows immediately because it's the strongest
+  analytics-engineering signal on the page.
+*/}
 <BaseLayout>
   <Hero />
-  <ImpactHighlights />
   <About />
   <Skills />
   <Experience />
+  <ImpactHighlights />
   <Projects />
   <Certifications />
   <Education />

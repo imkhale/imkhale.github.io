@@ -8,14 +8,16 @@ GitHub Pages qua GitHub Actions.
 ```
 site.config.mjs           ← Nguồn thông tin duy nhất: tên, headline, social links, domain
 src/
-  content/blog/            Bài viết blog (Markdown/MDX)
+  assets/                   Ảnh thật (headshot...) — đi qua Astro <Image>, tự convert webp/avif
+  content/blog/             Bài viết blog (Markdown/MDX)
   content.config.ts         Schema cho Content Collections
   data/                     Dữ liệu Skills, Experience, Projects, Certifications
   components/               Header, Footer, Hero, Skills, Experience, Projects, Certifications
   layouts/                  BaseLayout (SEO, theme), BlogPostLayout
-  pages/                     index.astro (trang chủ), blog/ (danh sách + chi tiết bài viết)
-  styles/global.css          Design tokens (màu, spacing, type scale), dark/light mode
-public/                    Static assets (favicon, cv.pdf, og-image.png...)
+  pages/                    index.astro (trang chủ), blog/ (danh sách + chi tiết bài viết)
+  styles/global.css         Design tokens (màu, spacing, type scale), dark/light mode
+public/                     Static assets phục vụ nguyên trạng (favicon, cv.pdf, og-image.png)
+scripts/make-og.mjs         Sinh public/og-image.png (chạy `npm run og`)
 .github/workflows/deploy.yml  Workflow build + deploy lên GitHub Pages
 ```
 
@@ -39,7 +41,7 @@ npm run preview
 
 ## 2. Điền nội dung của bạn
 
-Tất cả nội dung đang là **placeholder**, đánh dấu bằng `[...]`. Sửa ở các file sau — không cần đụng vào component:
+Nội dung thật đã được điền. Sửa ở các file sau — không cần đụng vào component:
 
 | Nội dung | File |
 |---|---|
@@ -49,7 +51,8 @@ Tất cả nội dung đang là **placeholder**, đánh dấu bằng `[...]`. S�
 | Chứng chỉ | `src/data/certifications.ts` |
 | Dự án/portfolio | `src/data/projects.ts` |
 | CV (file PDF thật) | đặt file tại `public/cv.pdf` |
-| Ảnh chia sẻ mạng xã hội (OG image, 1200×630px) | đặt file tại `public/og-image.png` |
+| Ảnh chia sẻ mạng xã hội (OG image, 1200×630px) | `npm run og` — sinh lại `public/og-image.png` từ `scripts/make-og.mjs` |
+| Ảnh chân dung (headshot) | đặt file tại `src/assets/portrait.jpg` — xem `src/assets/README.md` để biết yêu cầu crop/ánh sáng |
 | Favicon | thay `public/favicon.svg` nếu muốn logo/monogram riêng |
 
 ### Viết bài blog mới
@@ -113,3 +116,7 @@ Khi bạn mua domain riêng (vd `yourname.dev`), chỉ cần:
 - **Dark/Light mode**: script inline chống flash khi load trang, lưu lựa chọn vào `localStorage`, mặc định theo `prefers-color-scheme` của hệ thống.
 - **Không dùng UI framework** (React/Vue...) — toàn bộ là Astro components (`.astro`), zero JS runtime ngoại trừ vài script nhỏ (theme toggle, mobile menu, scroll-reveal animation). Build nhẹ, tải nhanh.
 - **Accessibility**: focus ring rõ ràng, target chạm tối thiểu 44×44px, tôn trọng `prefers-reduced-motion`, contrast đạt WCAG AA.
+- **Design tokens**: mọi `font-size` đều trỏ về thang `--text-*` trong `global.css`, mọi khoảng cách trỏ về `--space-*`. Nhịp dọc của section điều khiển bằng `--section-padding` / `--section-heading-gap` — đổi ở một chỗ, cả trang đổi theo.
+- **Ảnh**: file trong `src/assets/` đi qua `<Image>`/`<Picture>` (tự sinh webp/avif, đặt sẵn width/height, lazy-load). File trong `public/` được phục vụ nguyên trạng, **không** qua bước tối ưu này.
+- **Projects mở rộng thế nào**: `PROJECTS[0]` render thành card lớn (kèm sơ đồ kiến trúc), các mục sau render thành lưới card gọn. Thêm project thứ 2 chỉ cần thêm object vào `src/data/projects.ts`, không phải sửa layout.
+- **Skills có nhãn độ sâu**: mỗi nhóm mang `level: "Core" | "Actively building"` — nói thẳng cái gì đã vững qua nhiều năm, cái gì đang xây. Nhóm không có `level` (Domain Expertise) là ngữ cảnh, không phải mức thành thạo.

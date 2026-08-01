@@ -7,6 +7,10 @@
   --color-primary: #18181b;
   --color-secondary: #52525b;
   --color-accent: #2563eb;
+  /* For accent-coloured text sitting ON --color-accent-glow. The plain
+     accent only reaches ~4.2:1 against that tinted fill, which fails AA at
+     the 11-12px sizes those chips use; this darker step clears 5:1. */
+  --color-accent-strong: #1d4ed8;
   --color-accent-foreground: #ffffff;
   --color-muted: #f0f0f2;
   --color-border: #e4e4e7;
@@ -17,16 +21,38 @@
   --font-sans:
     "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
+  /* Type scale. Every font-size in the project resolves to one of these —
+     no ad-hoc rem values in components. Each step has a stated job so the
+     scale stays a system rather than drifting back into magic numbers. */
+  --text-2xs: 0.6875rem; /* 11 — micro eyebrows, pipeline nodes */
+  --text-xs: 0.75rem; /*    12 — uppercase labels, tags */
+  --text-sm: 0.8125rem; /*  13 — metadata, captions */
+  --text-md: 0.875rem; /*   14 — secondary UI, footnotes */
+  --text-base: 0.9375rem; /* 15 — nav, buttons, card titles */
+  --text-lg: 1rem; /*       16 — body copy */
+  --text-xl: 1.0625rem; /*  17 — lead paragraphs */
+  --text-2xl: 1.125rem; /*  18 — sub-headings */
+  --text-3xl: 1.5rem; /*    24 — stat values */
+
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
   --space-4: 1rem;
+  --space-5: 1.25rem;
   --space-6: 1.5rem;
   --space-8: 2rem;
+  --space-10: 2.5rem;
   --space-12: 3rem;
   --space-16: 4rem;
+  --space-20: 5rem;
   --space-24: 6rem;
   --space-32: 8rem;
+
+  /* Vertical rhythm. Sections and the gap under a section heading are
+     driven from these two so the page keeps one cadence — change the
+     rhythm here, not in eight component stylesheets. */
+  --section-padding: var(--space-24);
+  --section-heading-gap: var(--space-12);
 
   --content-width: 72rem;
   --content-width-narrow: 42rem;
@@ -49,6 +75,9 @@
   --color-primary: #fafafa;
   --color-secondary: #a1a1aa;
   --color-accent: #5b8def;
+  /* On dark surfaces the glow fill is dark too, so the plain accent already
+     clears AA (~4.9:1) — no darker step needed, and a darker one would hurt. */
+  --color-accent-strong: #5b8def;
   --color-accent-foreground: #09090b;
   --color-muted: #18181b;
   --color-border: #27272a;
@@ -113,19 +142,33 @@ h4 {
 }
 
 h1 {
-  font-size: clamp(2.5rem, 5vw + 1rem, 4.25rem);
+  font-size: clamp(2.25rem, 4vw + 1rem, 3.5rem);
 }
 
 h2 {
-  font-size: clamp(1.75rem, 2.5vw + 1rem, 2.5rem);
+  font-size: clamp(1.625rem, 2vw + 1rem, 2.125rem);
 }
 
+/* h3 is always set by the component that owns it (card title, timeline
+   role, project name) — those contexts want different sizes, so the base
+   rule only carries the shared weight/tracking from the h1-h4 block above. */
 h3 {
-  font-size: clamp(1.25rem, 1vw + 1rem, 1.5rem);
+  font-size: var(--text-2xl);
 }
 
 p {
   margin: 0;
+}
+
+/* ── Shared eyebrow ─────────────────────────────────────────────────── */
+/* The small uppercase accent label above a section title. Used by
+   SectionHeading and by any strip that needs the same rank. */
+.eyebrow {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent);
 }
 
 .text-muted {
@@ -153,16 +196,48 @@ p {
 }
 
 .section {
-  padding-block: var(--space-24);
+  padding-block: var(--section-padding);
 }
 
 .section-alt {
   background: var(--color-surface-alt);
+  border-block: 1px solid var(--color-border);
 }
 
 @media (max-width: 640px) {
-  .section {
-    padding-block: var(--space-16);
+  :root {
+    --section-padding: var(--space-16);
+    --section-heading-gap: var(--space-8);
+  }
+}
+
+/* ── Surfaces ───────────────────────────────────────────────────────── */
+/* One card treatment for the whole site. Components set their own padding
+   and layout; the border/radius/elevation live here so cards can't drift
+   apart from each other. */
+.surface {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.surface-interactive {
+  transition:
+    border-color 0.25s var(--ease),
+    box-shadow 0.25s var(--ease),
+    transform 0.25s var(--ease);
+}
+
+.surface-interactive:hover {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .surface-interactive:hover {
+    transform: none;
   }
 }
 
@@ -174,7 +249,7 @@ p {
   min-height: 44px;
   padding: var(--space-3) var(--space-6);
   border-radius: 999px;
-  font-size: 0.9375rem;
+  font-size: var(--text-base);
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
