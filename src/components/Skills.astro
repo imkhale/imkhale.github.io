@@ -3,7 +3,7 @@ import TechLogo from "./TechLogo.astro";
 import { SKILL_GROUPS } from "../data/skills";
 ---
 
-<section class="section" id="skills">
+<section class="section section-alt" id="skills">
   <div class="container">
     <h2 data-reveal>Skills</h2>
     <div class="skills-grid">
@@ -52,8 +52,19 @@ import { SKILL_GROUPS } from "../data/skills";
   .skill-card {
     padding: var(--space-6);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius);
+    border-radius: var(--radius-lg);
     background: var(--color-surface);
+    box-shadow: var(--shadow-sm);
+    transition:
+      box-shadow 0.25s var(--ease),
+      transform 0.25s var(--ease),
+      border-color 0.25s var(--ease);
+  }
+
+  .skill-card:hover {
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-3px);
   }
 
   .skill-card h3 {

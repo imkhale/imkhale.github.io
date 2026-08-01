@@ -4,6 +4,10 @@ export interface Project {
   stack: string[];
   githubUrl: string;
   liveUrl?: string;
+  // Optional pipeline/architecture stages — rendered as a small flow
+  // diagram on the project card. Only set this when the stages reflect
+  // the project's real layering (e.g. dbt staging-to-mart), not as decor.
+  pipeline?: string[];
 }
 
 // PLACEHOLDER description — keep the repo link real, tighten the copy once
@@ -16,5 +20,6 @@ export const PROJECTS: Project[] = [
     stack: ["dbt", "BigQuery", "SQL", "Python"],
     githubUrl:
       "https://github.com/yourusername/insurance-analytics-warehouse",
+    pipeline: ["Staging", "Intermediate", "Mart"],
   },
 ];

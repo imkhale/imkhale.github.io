@@ -3,11 +3,15 @@ import ThemeToggle from "./ThemeToggle.astro";
 import Icon from "./Icon.astro";
 import { NAME } from "../../site.config.mjs";
 
+// "Blog" is intentionally left out of nav until real posts exist — the
+// content collection currently only has the scaffold sample post, and
+// linking to that from primary nav does more harm than not having a
+// blog link at all. Add it back once there's at least one real post.
 const NAV_LINKS = [
+  { href: "/#about", label: "About" },
   { href: "/#skills", label: "Skills" },
   { href: "/#experience", label: "Experience" },
   { href: "/#projects", label: "Projects" },
-  { href: "/blog", label: "Blog" },
   { href: "/#contact", label: "Contact" },
 ];
 ---

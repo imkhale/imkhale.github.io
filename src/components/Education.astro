@@ -1,0 +1,94 @@
+---
+import Icon from "./Icon.astro";
+import { EDUCATION } from "../data/education";
+---
+
+<section class="section section-alt" id="education">
+  <div class="container">
+    <h2 data-reveal>Education</h2>
+    <ul class="education-list">
+      {
+        EDUCATION.map((edu) => (
+          <li class="education-item" data-reveal>
+            <span class="education-icon">
+              {edu.logo ? (
+                <img src={edu.logo} alt="" width="28" height="28" />
+              ) : (
+                <Icon name="graduation-cap" size={18} />
+              )}
+            </span>
+            <span class="education-text">
+              <span class="education-institution">{edu.institution}</span>
+              <span class="text-muted education-meta">
+                {edu.degree}
+                {edu.year && ` · ${edu.year}`}
+              </span>
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  h2 {
+    margin-bottom: var(--space-12);
+  }
+
+  .education-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .education-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    min-height: 44px;
+    padding: var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-sm);
+    max-width: 34rem;
+  }
+
+  .education-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--color-muted);
+    color: var(--color-accent);
+    overflow: hidden;
+  }
+
+  .education-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .education-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .education-institution {
+    font-weight: 600;
+    font-size: 0.9375rem;
+  }
+
+  .education-meta {
+    font-size: 0.8125rem;
+  }
+</style>

@@ -1,15 +1,31 @@
 ---
 import Icon from "./Icon.astro";
 import { PROJECTS } from "../data/projects";
+import { SOCIALS } from "../../site.config.mjs";
 ---
 
-<section class="section" id="projects">
+<section class="section section-alt" id="projects">
   <div class="container">
     <h2 data-reveal>Projects</h2>
     <div class="project-grid">
       {
         PROJECTS.map((project) => (
           <article class="project-card" data-reveal>
+            {
+              project.pipeline && (
+                <div class="project-pipeline" aria-hidden="true">
+                  {project.pipeline.map((stage, i) => (
+                    <>
+                      <span class="pipeline-node">{stage}</span>
+                      {i < project.pipeline!.length - 1 && (
+                        <span class="pipeline-arrow">&rarr;</span>
+                      )}
+                    </>
+                  ))}
+                </div>
+              )
+            }
+            <p class="project-eyebrow">Case Study</p>
             <h3>{project.title}</h3>
             <p class="text-muted project-description">
               {project.description}
@@ -44,6 +60,16 @@ import { PROJECTS } from "../data/projects";
           </article>
         ))
       }
+      <a
+        href={SOCIALS.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="project-card project-card-ghost"
+        data-reveal
+      >
+        <Icon name="github" size={20} />
+        <span>More on GitHub</span>
+      </a>
     </div>
   </div>
 </section>
@@ -55,20 +81,59 @@ import { PROJECTS } from "../data/projects";
 
   .project-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 24rem));
     gap: var(--space-6);
   }
 
   .project-card {
     padding: var(--space-8);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius);
+    border-radius: var(--radius-lg);
     background: var(--color-surface);
-    transition: border-color 0.2s var(--ease);
+    box-shadow: var(--shadow-sm);
+    transition:
+      border-color 0.25s var(--ease),
+      box-shadow 0.25s var(--ease),
+      transform 0.25s var(--ease);
   }
 
   .project-card:hover {
     border-color: var(--color-accent);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-3px);
+  }
+
+  .project-pipeline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-6);
+  }
+
+  .pipeline-node {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    background: var(--color-accent-glow);
+    border-radius: 999px;
+    padding: var(--space-1) var(--space-3);
+  }
+
+  .pipeline-arrow {
+    color: var(--color-secondary);
+    font-size: 0.75rem;
+  }
+
+  .project-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-secondary);
+    margin-bottom: var(--space-2);
   }
 
   .project-card h3 {
@@ -119,6 +184,26 @@ import { PROJECTS } from "../data/projects";
   }
 
   .project-link:hover {
+    color: var(--color-accent);
+  }
+
+  .project-card-ghost {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    min-height: 12rem;
+    border: 1px dashed var(--color-border);
+    box-shadow: none;
+    text-decoration: none;
+    color: var(--color-secondary);
+    font-weight: 600;
+    font-size: 0.9375rem;
+  }
+
+  .project-card-ghost:hover {
+    border-style: solid;
     color: var(--color-accent);
   }
 </style>

@@ -1,6 +1,9 @@
 export interface Role {
   title: string;
   period: string;
+  // Optional reporting line — only set when it adds real signal (e.g. a
+  // regional manager for a Vietnam-based role), not for every role.
+  reportsTo?: string;
 }
 
 export interface ExperienceItem {
@@ -15,6 +18,10 @@ export interface ExperienceItem {
   roles: Role[];
   summary: string;
   highlights: string[];
+  // Tools actually used on this job — not the global Skills list. Keep
+  // this scoped to what's genuinely job-proven; side projects (e.g. dbt)
+  // belong under Projects instead, so this list stays a credible signal.
+  techTags?: string[];
 }
 
 export const EXPERIENCE: ExperienceItem[] = [
@@ -36,6 +43,16 @@ export const EXPERIENCE: ExperienceItem[] = [
       "Built an MA Recapture dashboard flagging ~30,000 maturing policies for agent outreach, lifting retention 60% year-over-year.",
       "Cut PBIX documentation and metric-validation turnaround from 5 days to 20 minutes with GitHub Copilot + Power BI MCP workflows.",
     ],
+    techTags: [
+      "Power BI",
+      "DAX",
+      "Power Query",
+      "SQL",
+      "Python",
+      "Airflow",
+      "Git",
+      "GitHub Copilot",
+    ],
   },
   {
     company: "KONE Vietnam",
@@ -46,6 +63,7 @@ export const EXPERIENCE: ExperienceItem[] = [
       {
         title: "Country S&OP Team Lead — Operations Analytics & BI",
         period: "Sep 2023 — Jun 2024",
+        reportsTo: "Reporting to the SEA S&OP Manager",
       },
       {
         title: "S&OP Specialist — Operations Analytics & BI",
@@ -60,6 +78,7 @@ export const EXPERIENCE: ExperienceItem[] = [
       "Designed a resource-planning tool in Excel/Power Query, saving USD 17,000 and cutting processing time 80%.",
       "Supported ~600B VND in 2023 revenue delivery through recurring forecast reviews and variance analysis.",
     ],
+    techTags: ["Power BI", "Excel", "Power Query"],
   },
   {
     company: "Keppel Land Vietnam",
@@ -73,10 +92,39 @@ export const EXPERIENCE: ExperienceItem[] = [
       },
     ],
     summary:
-      "Rotational program spanning property and project management for a major residential handover.",
+      "Selected as 1 of 4 candidates from 200+ applicants for Keppel Land Vietnam's Management Associate program, a future-leader pipeline with a rotation spanning property and project management for a major residential handover.",
     highlights: [
       "Built Excel tracking tools for an 816-unit handover, adopted by a 9-person operations team.",
       "Coordinated defect rectification across 300+ units as primary liaison between customers, contractors, and internal stakeholders.",
     ],
+    techTags: ["Excel"],
+  },
+];
+
+// Curated from the highlights above — the 3 most concrete, quantified
+// results, surfaced as a standalone strip so impact doesn't stay buried
+// in bullet prose. Keep these numbers in sync with the source highlight
+// if either changes.
+export interface FeaturedImpact {
+  value: string;
+  label: string;
+  company: string;
+}
+
+export const FEATURED_IMPACT: FeaturedImpact[] = [
+  {
+    value: "60%",
+    label: "YoY retention lift from the MA Recapture dashboard",
+    company: "Prudential Vietnam",
+  },
+  {
+    value: "28%",
+    label: "Utilization increase, later adopted across 6 SEA countries",
+    company: "KONE Vietnam",
+  },
+  {
+    value: "$17K",
+    label: "Saved with an Excel/Power Query resource-planning tool",
+    company: "KONE Vietnam",
   },
 ];

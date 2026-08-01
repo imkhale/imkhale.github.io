@@ -1,0 +1,72 @@
+---
+import { FEATURED_IMPACT } from "../data/experience";
+---
+
+<section class="impact" aria-labelledby="impact-heading">
+  <div class="container">
+    <p class="impact-eyebrow" id="impact-heading" data-reveal>
+      Featured impact
+    </p>
+    <div class="impact-grid">
+      {
+        FEATURED_IMPACT.map((item) => (
+          <div class="impact-tile" data-reveal>
+            <span class="impact-value text-mono">{item.value}</span>
+            <p class="impact-label">{item.label}</p>
+            <span class="text-muted impact-company">{item.company}</span>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .impact {
+    padding-block: var(--space-16);
+  }
+
+  .impact-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: var(--space-8);
+  }
+
+  .impact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-8);
+  }
+
+  .impact-tile {
+    padding-inline-start: var(--space-6);
+    border-left: 2px solid var(--color-accent);
+  }
+
+  .impact-value {
+    display: block;
+    font-size: clamp(2rem, 3vw + 1rem, 2.75rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-2);
+  }
+
+  .impact-label {
+    margin-bottom: var(--space-3);
+    max-width: 26ch;
+  }
+
+  .impact-company {
+    font-size: 0.8125rem;
+  }
+
+  @media (max-width: 768px) {
+    .impact-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+  }
+</style>

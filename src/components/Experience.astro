@@ -21,11 +21,18 @@ import { EXPERIENCE } from "../data/experience";
               )}
               <div class="role-track">
                 {item.roles.map((role) => (
-                  <div class="role-row">
-                    <span class="role-title">{role.title}</span>
-                    {item.roles.length > 1 && (
-                      <span class="text-muted role-period text-mono">
-                        {role.period}
+                  <div class="role-block">
+                    <div class="role-row">
+                      <span class="role-title">{role.title}</span>
+                      {item.roles.length > 1 && (
+                        <span class="text-muted role-period text-mono">
+                          {role.period}
+                        </span>
+                      )}
+                    </div>
+                    {role.reportsTo && (
+                      <span class="text-muted role-reports-to">
+                        {role.reportsTo}
                       </span>
                     )}
                   </div>
@@ -37,6 +44,13 @@ import { EXPERIENCE } from "../data/experience";
                   <li>{highlight}</li>
                 ))}
               </ul>
+              {item.techTags && (
+                <ul class="timeline-tech">
+                  {item.techTags.map((tag) => (
+                    <li>{tag}</li>
+                  ))}
+                </ul>
+              )}
             </div>
           </li>
         ))
@@ -75,6 +89,7 @@ import { EXPERIENCE } from "../data/experience";
     height: 9px;
     border-radius: 50%;
     background: var(--color-accent);
+    box-shadow: 0 0 0 6px var(--color-accent-glow);
   }
 
   .timeline-item:first-child {
@@ -122,6 +137,12 @@ import { EXPERIENCE } from "../data/experience";
     white-space: nowrap;
   }
 
+  .role-reports-to {
+    display: block;
+    font-size: 0.8125rem;
+    font-style: italic;
+  }
+
   .timeline-summary {
     margin-bottom: var(--space-4);
     max-width: 60ch;
@@ -138,6 +159,25 @@ import { EXPERIENCE } from "../data/experience";
 
   .timeline-highlights li {
     color: var(--color-secondary);
+  }
+
+  .timeline-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    list-style: none;
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    max-width: 60ch;
+  }
+
+  .timeline-tech li {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-secondary);
+    background: var(--color-muted);
+    border-radius: 999px;
+    padding: var(--space-1) var(--space-3);
   }
 
   @media (max-width: 640px) {

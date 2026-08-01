@@ -18,6 +18,8 @@ export const ICONS = {
   close: '<path d="M6 6l12 12M18 6L6 18"/>',
   check: '<path d="M5 12l4 4 10-10"/>',
   download: '<path d="M12 3v12m0 0 5-5m-5 5-5-5M4 21h16"/>',
+  "graduation-cap":
+    '<path d="M12 3 2 8l10 5 10-5-10-5Z"/><path d="M6 10.5V16c0 1 2.7 2.5 6 2.5s6-1.5 6-2.5v-5.5"/><path d="M22 8v6"/>',
 } as const;
 
 export type IconName = keyof typeof ICONS;

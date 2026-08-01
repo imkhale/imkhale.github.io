@@ -1,0 +1,37 @@
+---
+// DRAFT copy — a coached first pass on Kha's career story. Keep editing
+// until every sentence sounds like something he'd actually say out loud.
+const STORY = [
+  "I graduated in Mechatronics Engineering from Ho Chi Minh City University of Technology, then joined Keppel Land Vietnam's Management Associate program — a rotation built for future business leaders, not for data people.",
+  "That's where the spark started, though I didn't notice it at the time. Coordinating an 816-unit handover, I built Excel trackers just to make sense of what was happening — which contractors were behind, which units still had defects, what the team needed to look at that week. I wasn't chasing data as a career. I just liked that a formula could tell me the truth faster than a meeting could.",
+  "That spark followed me to KONE and grew there — from reading a spreadsheet to building the dashboards an entire operations team relied on, then teaching myself SQL and Python simply because I wanted to understand more, before I even had a problem that needed them.",
+  "The same curiosity brought me to Prudential, where I now build the systems a life insurer's agency network trusts for real decisions — and it's what's pulling me toward the next layer, Analytics Engineering, the pipelines underneath the dashboards. I don't think it burns out. I think it's what keeps taking me further.",
+];
+---
+
+<section class="section" id="about">
+  <div class="container-narrow">
+    <h2 data-reveal>About</h2>
+    <div class="about-story">
+      {STORY.map((paragraph) => <p data-reveal>{paragraph}</p>)}
+    </div>
+  </div>
+</section>
+
+<style>
+  h2 {
+    margin-bottom: var(--space-8);
+  }
+
+  .about-story {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .about-story p {
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--color-secondary);
+  }
+</style>

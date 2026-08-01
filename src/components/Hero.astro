@@ -10,6 +10,7 @@ import {
 ---
 
 <section class="hero">
+  <div class="hero-glow" aria-hidden="true"></div>
   <div class="container hero-inner">
     <p class="hero-eyebrow" data-reveal>{NAME}</p>
     <h1 data-reveal>{ROLE_HEADLINE}</h1>
@@ -20,7 +21,11 @@ import {
       {
         IMPACT_STATS.map((stat) => (
           <div class="stat-tile">
-            <span class="stat-bar" aria-hidden="true" />
+            <svg class="stat-icon" viewBox="0 0 24 16" aria-hidden="true">
+              <rect class="stat-bar-1" x="0" y="9" width="5" height="7" rx="1.5" />
+              <rect class="stat-bar-2" x="9.5" y="5" width="5" height="11" rx="1.5" />
+              <rect class="stat-bar-3" x="19" y="0" width="5" height="16" rx="1.5" />
+            </svg>
             <span class="stat-value text-mono">{stat.value}</span>
             <span class="text-muted stat-label">{stat.label}</span>
           </div>
@@ -40,6 +45,8 @@ import {
 
 <style>
   .hero {
+    position: relative;
+    overflow: hidden;
     padding-block: var(--space-32) var(--space-24);
   }
 
@@ -49,7 +56,26 @@ import {
     }
   }
 
+  .hero-glow {
+    position: absolute;
+    top: -18rem;
+    left: 50%;
+    width: 60rem;
+    height: 40rem;
+    transform: translateX(-50%);
+    background: radial-gradient(
+      closest-side,
+      var(--color-accent-glow),
+      transparent 70%
+    );
+    filter: blur(10px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
   .hero-inner {
+    position: relative;
+    z-index: 1;
     max-width: 52rem;
   }
 
@@ -61,6 +87,8 @@ import {
   }
 
   .hero h1 {
+    font-weight: 800;
+    letter-spacing: -0.03em;
     margin-bottom: var(--space-6);
     transition-delay: 0.05s;
   }
@@ -97,12 +125,22 @@ import {
     gap: var(--space-2);
   }
 
-  .stat-bar {
-    display: block;
+  .stat-icon {
     width: 1.5rem;
-    height: 3px;
-    border-radius: 2px;
-    background: var(--color-accent);
+    height: 1rem;
+    display: block;
+  }
+
+  .stat-icon rect {
+    fill: var(--color-accent);
+  }
+
+  .stat-icon .stat-bar-1 {
+    opacity: 0.35;
+  }
+
+  .stat-icon .stat-bar-2 {
+    opacity: 0.65;
   }
 
   .stat-value {
